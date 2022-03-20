@@ -1,0 +1,143 @@
+<div class="resultParas">
+  <p class="guesses"></p>
+  <p class="lastResult"></p>
+  <p class="lowOrHi"></p>
+</div>
+<form onsubmit="return submitHandler()">
+  <label for="guessField">Enter a guess: </label><input type="text" id="guessField" class="guessField">
+  <input type="button" id="guessButton" value="Submit guess">
+  <input type="button" id="resetButton" value="Reset">
+</form>
+<script defer>
+
+  <!--Access functions-->
+  function getGuessField()
+  {
+    return document.querySelector('.guessField');
+  }
+  function getGuesses()
+  {
+    return guesses = document.querySelector('.guesses');
+  }
+  function getLastResult()
+  {
+    return document.querySelector('.lastResult');
+  }
+  function getLowOrHi()
+  {
+    return document.querySelector('.lowOrHi');
+  }
+  function getGuessButton()
+  {
+    return document.getElementById("guessButton");
+  }
+  function getResetButton()
+  {
+    return document.getElementById("resetButton");
+  }
+  
+  function setGameOver()
+  {
+  }
+  
+  function checkGuess()
+  {
+    const guesses    = getGuesses();
+    const guessField = getGuessField();
+    const lastResult = getLastResult();
+    const lowOrHi    = getLowOrHi();
+
+    const userGuess = Number(guessField.value);
+    if (guessCount === 0) {
+      guesses.textContent = 'Previous guesses: ';
+    }
+    guesses.textContent += userGuess + ' ';
+
+    if (userGuess === randomNumber) {
+      lastResult.textContent = 'Congratulations! You got it right!';
+      lastResult.style.backgroundColor = 'green';
+      lowOrHi.textContent = '';
+      setGameOver();
+    } else if (guessCount === MAX_GUESS_COUNT) {
+      lastResult.textContent = '!!!GAME OVER!!!';
+      lowOrHi.textContent = '';
+      setGameOver();
+    } else {
+      lastResult.style.backgroundColor = 'red';
+      if(userGuess < randomNumber) {
+        lowOrHi.textContent = 'Last guess was too low!';
+      } else if(userGuess > randomNumber) {
+        lowOrHi.textContent = 'Last guess was too high!';
+      }
+    }
+    guessCount++;
+    guessField.value = '';
+    guessField.focus();
+
+    return 0;
+  }
+  
+  function resetGuesses()
+  {
+    const guesses    = getGuesses();
+    const guessField = getGuessField();
+    const lastResult = getLastResult();
+    const lowOrHi    = getLowOrHi();
+
+    guesses.textContent = '';
+
+    guessField.value = '';
+    guessField.focus();
+
+    lastResult.style.backgroundColor = 'white';
+    lastResult.value = '';
+    lastResult.textContent = '';
+    
+    lowOrHi.value = '';
+    lowOrHi.textContent = '';
+
+    guessCount = 0;
+    randomNumber = Math.floor(Math.random() * 100) + 1;
+  }
+  
+  <!-- allows Enter key to not submit the form -->
+  function submitHandler()
+  {
+    checkGuess();
+    return false;
+  }
+
+  function init()
+  {
+    resetGuesses();
+  }
+  
+  <!-- Globals -->
+  let randomNumber = 0;
+  let MAX_GUESS_COUNT = 10;
+  let guessCount = 0;
+  
+  <!-- Main -->
+  init();
+  
+  const guessButton = getGuessButton();
+  guessButton.addEventListener("click", (e) => {
+    // fires when the button is clicked inside the form
+    checkGuess();
+  })
+  const resetButton = getResetButton();
+  resetButton.addEventListener("click", (e) => {
+    // fires when the button is clicked inside the form
+    resetGuesses();
+  })
+  
+  
+  
+  const fruits = ['apples', 'bananas', 'cherries'];
+  for (const fruit of fruits) {
+    console.log(fruit);
+  }
+
+  getGuessField().value = 'hello';
+
+</script>
